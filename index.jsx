@@ -205,19 +205,23 @@ class MapInteraction extends Component {
 
   // handles both touch and mouse drags
   onDrag(pointer) {
-    const { translation, pointers } = this.startPointerInfo;
-    const startPointer = pointers[0];
-    const dragX = pointer.clientX - startPointer.clientX;
-    const dragY = pointer.clientY - startPointer.clientY;
-    const newTranslation = {
-      x: translation.x + dragX,
-      y: translation.y + dragY
-    };
-
-    this.setState({
-      translation: this.clampTranslation(newTranslation),
-      stopClickPropagation: Boolean(Math.abs(dragX) + Math.abs(dragY) > 2)
-    }, () => this.updateParent());
+    if (this.startPointerInfo) {
+      const { translation, pointers } = this.startPointerInfo;
+      if (pointers && pointers[0]) {
+        const startPointer = pointers[0];
+        const dragX = pointer.clientX - startPointer.clientX;
+        const dragY = pointer.clientY - startPointer.clientY;
+        const newTranslation = {
+          x: translation.x + dragX,
+          y: translation.y + dragY
+        };
+    
+        this.setState({
+          translation: this.clampTranslation(newTranslation),
+          stopClickPropagation: Boolean(Math.abs(dragX) + Math.abs(dragY) > 2)
+        }, () => this.updateParent());
+      }
+    }
   }
 
   onWheel(e) {
